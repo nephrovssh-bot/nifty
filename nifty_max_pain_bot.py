@@ -7,8 +7,7 @@ import datetime
 BOT_TOKEN = "8450458054:AAGB9G17AaS3nRvDJvMeOoiKPGsg0Blwqwc"
 CHAT_ID = "@Vigneshsnp"
 
-NSE_URL = "https://nse-api.vercel.app/option-chain-indices?symbol=NIFTY"
-
+NSE_URL = "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY"
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Accept": "application/json",
@@ -23,10 +22,11 @@ def send_telegram(msg):
     requests.post(url, data={"chat_id": CHAT_ID, "text": msg})
 
 def get_option_chain():
-    r = requests.get(NSE_URL, timeout=10)
+    session = requests.Session()
+    session.get("https://www.nseindia.com", headers=HEADERS, timeout=10)
+    r = session.get(NSE_URL, headers=HEADERS, timeout=10)
     r.raise_for_status()
     return r.json()["records"]["data"]
-
 
 def calculate_max_pain(data):
     strikes = sorted(set(d["strikePrice"] for d in data))
