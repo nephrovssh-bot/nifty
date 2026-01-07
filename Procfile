@@ -1,0 +1,1 @@
+worker: python nifty_max_pain_bot.py
